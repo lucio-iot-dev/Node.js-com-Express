@@ -1,9 +1,22 @@
 const customExpress = require('./config/customExpress')
-const atendimento = require('./controllers/atendimento')
+const conexao = require('./infraestrutura/conexao')
+const Tabelas = require('./infraestrutura/tabelas')
+// const atendimento = require('./controllers/atendimento')
 
-const app = customExpress()
+conexao.connect(erro => {
+  if(erro) {
+    console.log(erro)
+  } else {
+      console.log('conectado com sucesso')
 
-app.listen(3000, () => console.log('Servidor rodando na porta 3000')) //subir o app no servidor
+      Tabelas.init(conexao)
+      const app = customExpress()
+
+      app.listen(3000, () => console.log('Servidor rodando na porta 3000')) //subir o app no servidor  
+  }
+})
+
+
 
 /*----------------------------------OBS--------------------------------------------------------------------------------*/
 // RESPONSABILIDADES: do index.js --> Subir o servidor no ar
